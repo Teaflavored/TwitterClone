@@ -28,12 +28,6 @@ describe "StaticPages" do
   		expect(page).to have_title("#{basetitle} | About")
   	end
 
-  	it "should have title" do
-  		visit '/static_pages/contact'
-  		expect(page).to have_title("#{basetitle} | Contact")
-  		#expect(page).not_to have_title(' My App | ')
-  	end
-
   end
 
   describe "Contact Page" do
