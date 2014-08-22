@@ -1,44 +1,32 @@
 require 'spec_helper'
 
 describe "StaticPages" do
+  include ApplicationHelper
 
-  let(:basetitle) {"My App"}
+  subject{page}
 
   describe "Home Page" do
-    it "Should have content My App" do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      visit root_path
-      expect(page).to have_content('My App')
-      expect(page).to have_title("#{basetitle} | Home")
-    end
+    before {visit root_path}
+    it {should have_content("My App")}
+    it {should have_title(full_title(""))}
+    it {should_not have_title("| Home")}
   end
 
   describe "Help Page" do
-  	it "should have the content Help" do
-  		visit help_path
-  		expect(page).to have_content('Help')
-  		expect(page).to have_title("#{basetitle} | Help")
-  	end
+  	before {visit help_path}
+    it {should have_content("Help")}
+    it {should have_title(full_title("Help"))}
   end
 
   describe "About Page" do
-  	it "should have the content About" do
-  		visit about_path
-  		expect(page).to have_content('About')
-  		expect(page).to have_title("#{basetitle} | About")
-  	end
-
+  	before {visit about_path}
+    it {should have_content("About")}
+    it {should have_title(full_title("About"))}
   end
 
   describe "Contact Page" do
-    it "should have the content Contact" do
-      visit contact_path
-      expect(page).to have_content("Contact")
-    end
-
-    it "should have the title Contact" do
-      visit contact_path
-      expect(page).to have_title("#{basetitle} | Contact")
-    end
+    before {visit contact_path}
+    it {should have_content("Contact")}
+    it {should have_title(full_title("Contact"))}
   end
 end
