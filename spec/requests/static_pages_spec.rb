@@ -2,12 +2,8 @@ require 'spec_helper'
 
 describe "StaticPages" do
 
-<<<<<<< HEAD
-	let (:basetitle) {'My App'}
-  
-=======
   let(:basetitle) {"My App"}
->>>>>>> filling-in-layout
+
   describe "Home Page" do
     it "Should have content My App" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
@@ -30,16 +26,6 @@ describe "StaticPages" do
   		visit about_path
   		expect(page).to have_content('About')
   		expect(page).to have_title("#{basetitle} | About")
-<<<<<<< HEAD
-  	end
-  end
-
-  describe "Contact Page" do
-  	it "should have content" do 
-  		visit '/static_pages/contact'
-  		expect(page).to have_content("Contact")
-=======
->>>>>>> filling-in-layout
   	end
 
   	it "should have title" do

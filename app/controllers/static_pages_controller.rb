@@ -10,8 +10,4 @@ class StaticPagesController < ApplicationController
 
   def contact
   end
-<<<<<<< HEAD
-=======
-  
->>>>>>> filling-in-layout
 end
