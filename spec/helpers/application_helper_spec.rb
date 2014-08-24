@@ -2,18 +2,15 @@ require 'spec_helper.rb'
 
 
 describe ApplicationHelper do
+	subject {full_title(heading)}
+
 	describe "full_title" do 
-
-		it "should include the page title" do 
-			expect(full_title("foo")).to match(/foo/)
-		end
-
-		it "should include the base title" do
-			expect(full_title("foo")).to match(/^My App/)
-		end
-
-		it "should not include bar" do
-			expect(full_title("")).not_to match(/\|/)
+		let(:heading) {"foo"}
+		it {should match(/foo/)}
+		it {should match(/^My App/)}
+		describe "No title given" do
+			let(:heading) {""}
+			it {should_not match(/\|/)}
 		end
 	end
 end
