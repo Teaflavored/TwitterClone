@@ -11,7 +11,7 @@
 	<%= render 'layouts/header.html.erb' %>
 	<div class="container">
 		<% flash.each do |k,v| %>
-			<div class="alert alert-<%= key %>"<%= value %></div>
+			<div class="alert alert-<%= k %>"><%= v %></div>
 		<% end %>
 		<%= yield %>
 		<%= render 'layouts/footer.html.erb' %>
