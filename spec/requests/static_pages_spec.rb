@@ -53,6 +53,8 @@ describe "StaticPages" do
       expect(page).to have_title(full_title("Sign Up"))
       click_link "My App"
       expect(page).to have_title(full_title(""))
+      click_link "Sign In"
+      expect(page).to have_title(full_title("Sign In"))
     end
   end
 
