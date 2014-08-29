@@ -17,8 +17,10 @@ describe "UserPages" do
   	it {should have_content(user.name)}
   	it {should have_title(user.name)}
   end
+
   describe "Sign Up" do
   	before {visit signup_path}
+
 	  describe "sign up with no information" do
 	  	it "should not increase user count" do
 	  		expect{click_button "Create Account"}.not_to change(User, :count)
@@ -28,13 +30,23 @@ describe "UserPages" do
 	  describe "sign up with valid information should increase user count" do
 	  	before do 
 		  	fill_in "Name", with: "Auster"
-		  	fill_in "Email", with: "Auster.s.chen@gmail.com"
+		  	fill_in "Email", with: "user@example.com"
 		  	fill_in "Password", with: "asdfasdf"
 		  	fill_in "Confirmation", with: "asdfasdf"
 		  end
 		  it "should increase user count by 1" do
 	  		expect { click_button "Create Account" }.to change(User, :count).by(1)
 	  	end
+
+	 		describe "after saving the user" do
+        before { click_button "Create Account" }
+        let(:user) { User.find_by(email: 'user@example.com') }
+
+        it { should have_link('Sign Out') }
+        it { should have_title(user.name) }
+        it { should have_selector('div.alert.alert-success', text: 'Welcome to My App!') }
+      end
+
 	  end
 	end
 
@@ -66,7 +78,9 @@ describe "UserPages" do
 		  end
 		  describe "after submission" do
 		  	before {click_button "Create Account"}
+
 		  	let(:user) {User.find_by(email: "auster.s.chen@gmail.com")}
+		  	
 		  	it {should have_selector("div.alert.alert-success", text: "Welcome")}
 		  	it {should have_title(full_title(user.name))}
 		  end

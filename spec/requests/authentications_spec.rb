@@ -47,6 +47,15 @@ describe "Sessions" do
 			it {should have_link("Profile", href: user_path(user))}
 			it {should_not have_link("Sign In", href: signin_path)}
 
+			describe "signing out after signing in should work" do
+				before do
+					click_link "Sign Out"
+				end
+
+				it {should have_title(full_title(""))}
+				it {should have_link("Sign In", href: signin_path)}
+				it {should_not have_link("Sign Out", href: signout_path)}
+			end
 		end
 
 	end
