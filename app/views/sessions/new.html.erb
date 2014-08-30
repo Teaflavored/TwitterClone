@@ -2,14 +2,15 @@
 <h1>Sign In</h1>
 <div class="row">
 	<div class="span6 offset3">
-		<%= form_for(:session, url: sessions_path ,method: :post) do |f| %>
-			<%= f.label :email %>
-			<%= f.text_field :email %>
+		<%= form_tag(controller: "sessions", action: "create", method: :post) do |f| %>
+			<%= label_tag(:email, "Email") %>
+			<%= text_field_tag(:email) %>
 
-			<%= f.label :password %>
-			<%= f.password_field :password %>
 
-			<%= f.submit "Sign In", class: "btn btn-large btn-primary" %>
+			<%= label_tag(:password, "Password") %>
+			<%= password_field_tag(:password) %>
+
+			<%= submit_tag("Sign In", class: "btn btn-large btn-primary") %>
 		<% end %>
 		<p>New User? <%=link_to "Sign Up Now!", signup_path %></p>
 	</div>

@@ -48,7 +48,9 @@ Spork.prefork do
     #     --seed 1234
     config.order = "random"
     config.include Capybara::DSL
-
+    config.include AuthenticationUtilities
+    config.include UserPagesUtilities
+    config.include StaticPagesUtilities
   end
 end
 

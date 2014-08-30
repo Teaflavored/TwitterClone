@@ -18,29 +18,20 @@ describe "Sessions" do
 		before { visit signin_path}
 
 		describe "invalid information" do
-			before do
-				fill_in "Email", with: "ASDF@gmail.com"
-				fill_in "Password", with: "DOES NOT EXIST"
-				click_button "Sign In"
-			end
-
-			it {should have_selector('div.alert.alert-error')}
+			
+			before {invalidsignin}
+			it {should have_error_message("Wrong")}
 
 			describe "visiting another page should not persist error" do
 				before {click_link "Home"}
-
-				it {should_not have_selector("div.alert.alert-error")}
-
+				it {should_not have_error_message("Wrong")}
 			end
+
 		end
 
 		describe "with valid information " do
 			let(:user) {FactoryGirl.create(:user)}
-			before do
-				fill_in "Email", with: user.email
-				fill_in "Password", with: user.password
-				click_button "Sign In"
-			end
+			before { validsignin(user) }
 
 			it {should have_title(full_title(user.name))}
 			it {should have_link("Sign Out", href: signout_path)}
@@ -48,13 +39,10 @@ describe "Sessions" do
 			it {should_not have_link("Sign In", href: signin_path)}
 
 			describe "signing out after signing in should work" do
-				before do
-					click_link "Sign Out"
-				end
 
-				it {should have_title(full_title(""))}
-				it {should have_link("Sign In", href: signin_path)}
-				it {should_not have_link("Sign Out", href: signout_path)}
+				before {click_link "Sign Out"}
+				it { should log_user_out}
+			
 			end
 		end
 

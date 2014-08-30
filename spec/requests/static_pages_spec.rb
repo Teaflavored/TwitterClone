@@ -1,41 +1,35 @@
 require 'spec_helper'
 
 describe "StaticPages" do
+  subject { page }
 
-  subject{page}
-
-  shared_examples_for "All Static Pages" do
-    it {should have_selector("h1", heading)}
-    it {should have_title(full_title(pagetitle))}
-  end
 
   describe "Home Page" do
     before {visit root_path}
-    let(:heading) {"My App"}
+    let(:heading) {"Welcome"}
     let(:pagetitle) {""}
-    it_should_behave_like "All Static Pages"
-    it {should_not have_title("| Home")}
+    it {should have_right_page(heading,pagetitle)}
   end
 
   describe "Help Page" do
   	before {visit help_path}
     let(:heading) {"Help"}
     let(:pagetitle) {"Help"}
-    it_should_behave_like "All Static Pages"
+    it {should have_right_page(heading,pagetitle)}
   end
 
   describe "About Page" do
   	before {visit about_path}
     let(:heading) {"About"}
     let(:pagetitle) {"About"}
-    it_should_behave_like "All Static Pages"
+    it {should have_right_page(heading,pagetitle)}
   end
 
   describe "Contact Page" do
     before {visit contact_path}
     let(:heading) {"Contact"}
     let(:pagetitle) {"Contact"}
-    it_should_behave_like "All Static Pages"
+    it {should have_right_page(heading,pagetitle)}
   end
 
   describe "Links" do
