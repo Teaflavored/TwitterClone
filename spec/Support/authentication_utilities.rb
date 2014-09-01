@@ -1,9 +1,9 @@
 module AuthenticationUtilities
 
 	def validsignin(user)
-		fill_in "Email", with: user.email
-		fill_in "Password", with: user.password
-		click_button "Sign In"
+			fill_in "Email", with: user.email
+			fill_in "Password", with: user.password
+			click_button "Sign In"
 	end
 
 	def invalidsignin
@@ -24,4 +24,15 @@ module AuthenticationUtilities
 			expect(page).to have_link("Sign In", href: signin_path)
 		end
 	end
+
+	RSpec::Matchers.define :have_links_when_signed_in do |user|
+		match do |page|
+
+			expect(page).to have_link("Sign Out", href: signout_path)
+			expect(page).to have_link("Profile", href: user_path(user))
+			expect(page).not_to have_link("Sign In", href: signin_path)
+			expect(page).to have_link("Settings", href: edit_user_path(user))
+		end
+	end
+
 end

@@ -18,9 +18,10 @@ describe "Sessions" do
 		before { visit signin_path}
 
 		describe "invalid information" do
-			
+
 			before {invalidsignin}
 			it {should have_error_message("Wrong")}
+			it {should_not have_links_when_signed_in()}
 
 			describe "visiting another page should not persist error" do
 				before {click_link "Home"}
@@ -34,9 +35,9 @@ describe "Sessions" do
 			before { validsignin(user) }
 
 			it {should have_title(full_title(user.name))}
-			it {should have_link("Sign Out", href: signout_path)}
-			it {should have_link("Profile", href: user_path(user))}
-			it {should_not have_link("Sign In", href: signin_path)}
+			it {should have_links_when_signed_in(user)}
+
+			#links when signed in
 
 			describe "signing out after signing in should work" do
 
