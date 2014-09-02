@@ -8,6 +8,18 @@ describe "UserPages" do
   	before {visit signup_path}
   	it{should have_content("Sign Up")}
   	it{should have_title(full_title("Sign Up"))}
+
+  	describe "Signed In Users should not see this page" do
+  		let(:user) {FactoryGirl.create(:user)}
+
+  		before do
+  			visit signin_path
+  			sign_in user
+  			visit signup_path
+  		end
+
+  		it {should_not have_title(full_title("Sign Up"))}
+  	end
   end
 
 
@@ -63,6 +75,15 @@ describe "UserPages" do
 				end
 				it {should_not have_link('delete', href: user_path(admin))}
 			end
+
+			describe "admin users should not be able to delete themselves" do
+				let(:admin) {FactoryGirl.create(:admin)}
+				before do
+					sign_in admin, no_capybara: true
+				end
+
+				specify {expect{ delete user_path(admin) }.not_to change(User, :count)}
+			end
 		end
 	end
 
@@ -101,8 +122,18 @@ describe "UserPages" do
   		specify { expect(user.reload.name).to eq new_name}
   		specify { expect(user.reload.email).to eq new_email}
 
+  	end
 
+  	describe "can't directly update admin attribute" do
+  		let(:params) do
+  			{ user: {admin: true, password: user.password, password_confirmation: user.password} }
+  		end
+  		before do
+  			sign_in user, no_capybara: true
+  			patch user_path(user), params
+  		end
 
+  		specify { expect(user.reload).not_to be_admin}
 
   	end
   end
@@ -147,10 +178,22 @@ describe "UserPages" do
         it { should have_title(user.name) }
         it { should have_selector('div.alert.alert-success', text: 'Welcome to My App!') }
       end
+	  end
 
+	  describe "Signed In users should not be able to send create action" do
+	  	let(:user) {FactoryGirl.create(:user)}
+	  	let(:params) do
+  			{ user: {name: user.name, email: user.email, password: user.password, password_confirmation: user.password} }
+	  	end
+	  	before do
+	  		visit signin_path
+	  		sign_in user, no_capybara: true
+	  		post users_path, params
+	  	end
+
+	  	specify { expect(response).to redirect_to(root_url)}
 	  end
 	end
-
 
 
 end

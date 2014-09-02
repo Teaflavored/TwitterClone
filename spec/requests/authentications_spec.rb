@@ -30,7 +30,7 @@ describe "Sessions" do
 
 		describe "with valid information " do
 			let(:user) {FactoryGirl.create(:user)}
-			before { validsignin(user) }
+			before { sign_in user }
 			it {should have_title(full_title(user.name))}
 			it {should have_links_when_signed_in(user)}
 			#links when signed in
@@ -112,6 +112,20 @@ describe "Sessions" do
 			end
 
 			it { should have_title(full_title("Edit"))}
+
+			describe "Signing In Again" do
+				before do 
+					click_link "Sign Out"
+					visit signin_path
+					fill_in "Email", with: user.email
+					fill_in "Password", with: user.password
+					click_button "Sign In"
+				end
+
+				it {should have_title(full_title(user.name))}
+				
+			end
+
 
 		end
 	end

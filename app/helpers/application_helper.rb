@@ -7,7 +7,4 @@ module ApplicationHelper
 			"#{base} | #{title}"
 		end
 	end
-
-
-
 end

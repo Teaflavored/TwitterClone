@@ -1,11 +1,5 @@
 module AuthenticationUtilities
 
-	def validsignin(user)
-			fill_in "Email", with: user.email
-			fill_in "Password", with: user.password
-			click_button "Sign In"
-	end
-
 	def invalidsignin
 		fill_in "Email", with: "fake@gmail.com"
 		fill_in "Password", with: "fakepw"
