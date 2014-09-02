@@ -32,6 +32,7 @@ module AuthenticationUtilities
 			expect(page).to have_link("Profile", href: user_path(user))
 			expect(page).not_to have_link("Sign In", href: signin_path)
 			expect(page).to have_link("Settings", href: edit_user_path(user))
+			expect(page).to have_link("Users", href: users_path)
 		end
 	end
 

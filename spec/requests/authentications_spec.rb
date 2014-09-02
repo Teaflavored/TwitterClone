@@ -57,6 +57,24 @@ describe "Sessions" do
 				before {patch user_path(user)}
 				specify { expect(response).to redirect_to(signin_path)}
 			end
+
+			describe "not signed_in users attempting to view users index" do
+				before { visit users_path}
+				it {should have_title(full_title("Sign In"))}
+			end
+		end
+
+
+		describe "as non-admin user" do
+			let(:user) { FactoryGirl.create(:user)}
+			let(:non_admin) {FactoryGirl.create(:user)}
+
+			before {sign_in non_admin, no_capybara: true}
+
+			describe "submitting a delete request to destroy" do
+				before {delete user_path(user)}
+				specify {expect(response).to redirect_to(root_url)}
+			end
 		end
 
 		describe "wrong user trying to access the page" do
