@@ -61,6 +61,16 @@ describe "Sessions" do
 				before { visit users_path}
 				it {should have_title(full_title("Sign In"))}
 			end
+      
+      describe "not signed_in users attempting to create micropost" do
+        before { post microposts_path }
+        specify { expect(response).to redirect_to(signin_url) }
+      end
+      
+      describe "not signed_in users attempting to destroy micropost" do
+        before { delete micropost_path(FactoryGirl.create(:micropost)) }
+        specify { expect(response).to redirect_to(signin_url) }
+      end
 		end
 
 		describe "non-admin users should not be able to delete users" do
