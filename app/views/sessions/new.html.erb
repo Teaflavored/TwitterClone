@@ -9,7 +9,10 @@
 
 			<%= label_tag(:password, "Password") %>
 			<%= password_field_tag(:password) %>
-
+			
+			<%= label_tag(:short_session, "Remember Me")%> 
+			<%= check_box_tag(:short_session)%>
+			
 			<%= submit_tag("Sign In", class: "btn btn-large btn-primary") %>
 		<% end %>
 		<p>New User? <%=link_to "Sign Up Now!", signup_path %></p>
