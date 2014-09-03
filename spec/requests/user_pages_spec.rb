@@ -152,6 +152,21 @@ describe "UserPages" do
       it { should have_content(m2.content) }
       it { should have_content(user.microposts.count) }
     end
+    
+    describe "accessing a non-existent user's profile should redirect to home page" do
+      let(:user) { FactoryGirl.create(:admin) } 
+      let(:user2) { FactoryGirl.create(:user, name: "randomtest", email: "randomtestthistoo@asdf.com") }
+      
+      before do
+        sign_in user, no_capybara: true
+        delete user_path(user2)
+        get user_path(user2)
+      end
+        
+      it "should redirect to home page" do
+        expect(response).to redirect_to root_url
+      end
+    end
   end
 
 
