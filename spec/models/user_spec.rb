@@ -5,20 +5,41 @@ describe User do
 
   subject {@user}
 
-  it {should respond_to(:name)}
-  it {should respond_to(:email)}
-  it {should respond_to(:password_digest)}
-  it {should respond_to(:password)}
-  it {should respond_to(:password_confirmation)}
-  it {should respond_to(:authenticate)}
-  it {should respond_to(:remember_token)}
-  it {should respond_to(:admin)}
+  it {should respond_to_user_attributes}
   it {should be_valid}
+
+  describe "micropost association" do
+    before {@user.save}
+
+
+    let!(:older_micrpost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)
+    end
+
+    let!(:newer_micropost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)
+    end
+
+    it "should have micropost in right order" do
+      expect(@user.microposts).to eq [newer_micropost, older_micrpost]
+    end
+
+    it "should destroy associated microposts" do
+      microposts  = @user.microposts.to_a
+      @user.destroy
+      expect(microposts).not_to be_empty
+
+      microposts.each do |post|
+        expect(Micropost.where(id: post.id)).to be_empty
+      end
+
+    end
+  end
 
   describe "with admin attribute set to true" do
     before do
-      @user.save!
-      @user.toggle!(:admin)
+      @user.save
+      @user.toggle(:admin)
     end
     it {should be_admin}
   end

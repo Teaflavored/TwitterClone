@@ -14,4 +14,16 @@ def sign_in(user, options={})
   end
 end
 
+Rspec::Matchers.define :respond_to_user_attributes do
+	match do |user|
+		expect(user).to respond_to(:name)
+		expect(user).to respond_to(:password_digest)
+		expect(user).to respond_to(:password)
+		expect(user).to respond_to(:password_confirmation)
+		expect(user).to respond_to(:authenticate)
+		expect(user).to respond_to(:remember_token)
+		expect(user).to respond_to(:admin)
+    expect(user).to respond_to(:microposts)
+	end
+end
 
