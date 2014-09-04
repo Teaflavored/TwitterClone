@@ -17,8 +17,7 @@ class User < ActiveRecord::Base
 	end
   
   def feed
-    #Micropost.where("user_id=?", id)
-    microposts
+    Micropost.where("user_id=?", id)
   end
 
 	private

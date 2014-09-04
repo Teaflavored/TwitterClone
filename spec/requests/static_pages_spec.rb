@@ -25,6 +25,59 @@ describe "StaticPages" do
         end
       end
     end
+    
+    
+    describe "micropost pluralrization" do
+      let(:user) { FactoryGirl.create(:user) }
+      let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "testing") }
+      before do
+        sign_in user
+        visit root_path
+      end
+      
+      
+      it { should have_title(full_title(""))}
+      it { should have_selector("span", text: "1 micropost") }
+      
+    end
+    
+    describe "micropost pluralrization" do
+      let(:user) { FactoryGirl.create(:user) }
+      let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "testing") }
+      let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "stesting") }
+      
+      before do
+        sign_in user
+        visit root_path
+      end
+      
+      
+      it { should have_title(full_title(""))}
+      it { should have_selector("span", text: "2 microposts") }
+      
+    end
+    
+    
+    
+    describe "micropost pagination" do
+      let(:user) { FactoryGirl.create(:user) }
+			after(:all) {user.microposts.delete_all}
+      
+      before do
+        31.times { FactoryGirl.create(:micropost, user: user, content: "random") }
+        sign_in user
+        visit root_url
+      end
+      
+      it { should have_selector('div.pagination')}
+      
+      it "should have all the microposts" do
+        user.microposts.paginate(page: 1).each do |post|
+          expect(page).to have_selector('li', text: user.name)
+        end
+      end
+      
+    end
   end
 
   describe "Help Page" do
