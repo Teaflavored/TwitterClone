@@ -8,6 +8,23 @@
 				<%= render 'shared/micropost_form'%>
 			</section>
 		</aside>
+		<aside class="span8">
+			<h2> <%= current_user.name%>'s Microposts </h2>
+			<ol>
+				<% if @user_feed.any? %>
+					<% @user_feed.to_a.each do |post| %>
+					<li>
+						<span class="conten">
+							<%= post.content %>
+						</span>
+						<span class="timestamp">
+							Posted <%= time_ago_in_words(post.created_at) %> Ago
+						</span>
+					</li>
+					<% end %>
+				<% end %>
+			</ol>
+		</aside>
 	</div>
 <% else %>
 	<div class="center hero-unit">

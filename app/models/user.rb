@@ -15,6 +15,11 @@ class User < ActiveRecord::Base
 	def User.digest(token)
 		Digest::SHA1.hexdigest(token.to_s)
 	end
+  
+  def feed
+    #Micropost.where("user_id=?", id)
+    microposts
+  end
 
 	private
 		def create_remember_token

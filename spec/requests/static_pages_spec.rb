@@ -9,6 +9,22 @@ describe "StaticPages" do
     let(:heading) {"Welcome"}
     let(:pagetitle) {""}
     it {should have_right_page(heading,pagetitle)}
+    
+    describe "for signed in users" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "asdfasdf")
+        FactoryGirl.create(:micropost, user: user, content: "testing2")
+        sign_in user
+        visit root_path
+      end
+      
+      it "should render user's feed" do
+        user.feed.each do |i|
+          expect(page).to have_selector("li##{i.id}", text: i.content)
+        end
+      end
+    end
   end
 
   describe "Help Page" do

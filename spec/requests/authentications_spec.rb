@@ -5,17 +5,19 @@ describe "Sessions" do
 	subject { page }
 
 	describe "Sign in page" do
-		let(:heading) {"Sign In"}
-		before {visit signin_path}
+		let(:heading) { "Sign In" }
+		before { visit signin_path }
 
-		it {should have_title(full_title(heading))}
-		it {should have_content(heading)}
-		it {should have_link("Sign Up", href: signup_path)}
+		it { should have_title(full_title(heading)) }
+		it { should have_content(heading) }
+    it { should have_content("Remember Me") }
+    it { should have_selector("input#short_session")}
+		it { should have_link("Sign Up", href: signup_path) }
 	end
 
 	describe "Signing in" do
 		before { visit signin_path}
-
+    
 		describe "with invalid information" do
 			before {invalidsignin}
 			it {should have_error_message("Wrong")}

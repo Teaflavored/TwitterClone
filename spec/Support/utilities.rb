@@ -24,6 +24,7 @@ Rspec::Matchers.define :respond_to_user_attributes do
 		expect(user).to respond_to(:remember_token)
 		expect(user).to respond_to(:admin)
     expect(user).to respond_to(:microposts)
+    expect(user).to respond_to(:feed)
 	end
 end
 

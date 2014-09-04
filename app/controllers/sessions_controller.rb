@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
   		flash[:success] = "Welcome Back!"
   		redirect_back_or user
   	else
+      @feed_items = []
   		flash.now[:error] = "Wrong Email/Password Combination"
   		render 'new'
   	end
