@@ -4,11 +4,12 @@
 		<%= f.label :content, "Content", class: "character-remaining"%>
 		<script>
 		$(document).ready(function(){
+
 			$('textarea').attr("maxlength", 140)
 			remaining_characters();
 		  $("#micropost_content").keyup(function(){
 				remaining_characters();
-			});
+			}); 
 		});
 		
 		function remaining_characters(){
