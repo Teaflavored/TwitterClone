@@ -7,7 +7,36 @@ describe User do
 
   it {should respond_to_user_attributes}
   it {should be_valid}
-
+  describe "following" do
+    let(:user2) { FactoryGirl.create(:user) }
+    before do
+      @user.save
+      @user.follow!(user2)
+    end
+    
+    it { should be_following(user2) }
+    its(:followed_users) { should include(user2) }
+    
+    describe "other user's followers" do
+      subject { user2 }
+      its(:followers) { should include(@user) }
+    end
+    
+    describe "unfollowing" do
+      before do
+        @user.unfollow!(user2)
+      end
+      
+      it { should_not be_following(user2) }
+      its(:followed_users) { should_not include(user2) }
+      
+      describe "other user's followers" do
+        subject { user2 }
+        its(:followers) { should_not include(@user) }
+      end
+    end
+  end
+  
   describe "micropost association" do
     before {@user.save}
 
@@ -36,13 +65,24 @@ describe User do
     end
     
     describe "status" do
+      
       let(:unfollowed_post) do
         FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
+      end
+      let(:followed_user) { FactoryGirl.create(:user) }
+      before do
+        @user.follow!(followed_user)
+        3.times { followed_user.microposts.create!(content: "hi") }
       end
       
       its(:feed) { should include(newer_micropost) }
       its(:feed) { should include(older_micropost) }
       its(:feed) { should_not include(unfollowed_post) }
+      its(:feed) do
+        followed_user.microposts.each do |post|
+          should include(post)
+        end
+      end
     end
   end
 

@@ -26,6 +26,11 @@ Rspec::Matchers.define :respond_to_user_attributes do
     expect(user).to respond_to(:microposts)
     expect(user).to respond_to(:feed)
     expect(user).to respond_to(:relationships)
+    expect(user).to respond_to(:followed_users)
+    expect(user).to respond_to(:following?)
+    expect(user).to respond_to(:follow!)
+    expect(user).to respond_to(:unfollow!)
+    expect(user).to respond_to(:followers)
 	end
 end
 

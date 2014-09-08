@@ -5,7 +5,10 @@
 	</span>
 	<span class="content"> <%= wrap(feed_item.content) %></span>
 	<span class="timestamp">
-	
-<%= wrap("Posted " + time_ago_in_words(feed_item.created_at)+ " ago. " ) %> <%= render 'shared/delete', micropost: feed_item %>
+	<% if current_user?(feed_item.user) %>
+		<%= wrap("Posted " + time_ago_in_words(feed_item.created_at)+ " ago. " ) %> <%= render 'shared/delete', 		micropost: feed_item %>
+	<% else %>
+		<%= wrap("Posted " + time_ago_in_words(feed_item.created_at)+ " ago. " ) %>
+	<% end%>
 	</span>
 </li>

@@ -40,6 +40,7 @@ describe "Sessions" do
 				before {click_link "Sign Out"}
 				it { should log_user_out}
 			end
+      
 
 		end
 	end
@@ -64,6 +65,17 @@ describe "Sessions" do
 				it {should have_title(full_title("Sign In"))}
 			end
       
+      describe "visiting following page" do
+        before { visit following_user_path(user) }
+        it { should have_title(full_title('Sign In')) }
+      end
+      
+      describe "visiting followers page" do
+        before { visit followers_user_path(user) }
+        it { should have_title(full_title('Sign In')) } 
+      end
+      
+      
       describe "not signed_in users attempting to create micropost" do
         before { post microposts_path }
         specify { expect(response).to redirect_to(signin_url) }
@@ -71,6 +83,16 @@ describe "Sessions" do
       
       describe "not signed_in users attempting to destroy micropost" do
         before { delete micropost_path(FactoryGirl.create(:micropost)) }
+        specify { expect(response).to redirect_to(signin_url) }
+      end
+      
+      describe "relationship controller" do
+        before { post relationships_path }
+        specify { expect(response).to redirect_to(signin_url) }
+      end
+      
+      describe "submitting to destroy" do
+        before { delete relationship_path(1) }
         specify { expect(response).to redirect_to(signin_url) }
       end
 		end
