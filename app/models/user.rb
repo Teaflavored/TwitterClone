@@ -35,6 +35,9 @@ class User < ActiveRecord::Base
     return true if other_user.followed_users.include?(self)
   end
   
+  def self.search(search)
+    find(:all, conditions: ['name ILIKE ?', "%#{search}%"])
+  end
   
   def follow!(other_user)
     self.relationships.create!(followed_id: other_user.id)
