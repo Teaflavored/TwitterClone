@@ -247,6 +247,19 @@ describe "UserPages" do
         expect(response).to redirect_to root_url
       end
     end
+    
+    
+    describe "following/followers count" do
+      let(:user2) { FactoryGirl.create(:user) }
+      before do
+        sign_in user
+        user.follow!(user2)
+        visit root_path
+      end
+      
+      it { should have_link("1 following", href: following_user_path(user)) }
+      it { should have_link("0 followers", href: followers_user_path(user)) }
+    end
   end
 
 

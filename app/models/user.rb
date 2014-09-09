@@ -4,8 +4,7 @@ class User < ActiveRecord::Base
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: :followed
   has_many :reverse_relationships, foreign_key: "followed_id",
-                                     class_name:  "Relationship",
-                                     dependent:   :destroy
+                                     class_name:  "Relationship"
   has_many :followers, through: :reverse_relationships, source: :follower
 	before_save {self.email = email.downcase}
 	has_secure_password
@@ -28,6 +27,12 @@ class User < ActiveRecord::Base
 
   def following?(other_user)
     return true if self.followed_users.include?(other_user)
+    #returns true if self is following the other_user
+  end
+  
+  def followed?(other_user)
+    #returns true if other_user is following self
+    return true if other_user.followed_users.include?(self)
   end
   
   

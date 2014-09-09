@@ -8,10 +8,13 @@ describe User do
   it {should respond_to_user_attributes}
   it {should be_valid}
   describe "following" do
+    
     let(:user2) { FactoryGirl.create(:user) }
+    let(:user3) { FactoryGirl.create(:user) }
     before do
       @user.save
       @user.follow!(user2)
+      user3.follow!(@user)
     end
     
     it { should be_following(user2) }
@@ -35,6 +38,21 @@ describe User do
         its(:followers) { should_not include(@user) }
       end
     end
+    
+    
+    describe "destroy user should remove it as follower" do
+      before do
+        @user.destroy
+      end
+      
+      it { should_not be_following(user2) }
+      
+      describe "destroying user should remove it from followed" do
+        it { should_not be_followed(user3) }
+      end
+
+    end
+    
   end
   
   describe "micropost association" do
@@ -64,6 +82,7 @@ describe User do
 
     end
     
+ 
     describe "status" do
       
       let(:unfollowed_post) do
