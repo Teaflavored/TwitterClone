@@ -31,6 +31,8 @@ Rspec::Matchers.define :respond_to_user_attributes do
     expect(user).to respond_to(:follow!)
     expect(user).to respond_to(:unfollow!)
     expect(user).to respond_to(:followers)
+    expect(user).to respond_to(:password_reset_sent_at)
+    expect(user).to respond_to(:password_reset_token)
 	end
 end
 

@@ -4,7 +4,7 @@ NewApp::Application.routes.draw do
       get :following, :followers
     end
   end
-  
+  resources :password_resets, only: [:new, :create, :edit, :update]
   resources :sessions, only: [:new,:create,:destroy]
   resources :microposts, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
