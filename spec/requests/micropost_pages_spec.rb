@@ -22,6 +22,10 @@ describe "MicropostPages" do
         expect { click_button "Post" }.to change(Micropost, :count).by(1)
       end
     end
+    
+    describe "adding replies" do
+      
+    end
   end
   
   

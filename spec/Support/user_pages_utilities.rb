@@ -3,6 +3,7 @@ module UserPagesUtilities
 	def validsignup
 		fill_in "Name", with: "Auster Chen"
 		fill_in "Email", with: "user@example.com"
+    fill_in "Username", with: "teaflavored"
 		fill_in "Password", with: "asdfasdf"
 		fill_in "Confirmation", with: "asdfasdf"
 	end
@@ -11,6 +12,7 @@ module UserPagesUtilities
 		fill_in "Name", with: ""
 		fill_in "Email", with: ""
 		fill_in "Password", with: "123"
+    fill_in "Username", with: ""
 		fill_in "Confirmation", with: "123"
 	end
 

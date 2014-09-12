@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe User do
-  before {@user=User.new(name: "Example User", email: "user@example.com", password: "foobar", password_confirmation: "foobar")}
+  before { @user=User.new(name: "Example User", email: "user@example.com", 
+    username: "teaflavored", password: "foobar", password_confirmation: "foobar") }
 
-  subject {@user}
+  subject { @user }
 
   it {should respond_to_user_attributes}
   it {should be_valid}
@@ -105,6 +106,61 @@ describe User do
     end
   end
 
+  describe "when username is not valid" do
+    describe "presence of username" do
+      before do
+        @user.username = ""
+        @user.save
+      end
+      it { should_not be_valid}
+    end
+    
+    describe "username has space in it" do
+      before do
+        @user.username = "teaflavored hi"
+        @user.save
+      end
+      it { should_not be_valid }
+    end
+    
+    describe "username is either too long or too short" do
+      before do
+        @user.username = "adf"
+        @user.save
+      end
+      
+      it { should_not be_valid }
+      
+      describe "username too long" do
+        before do
+          @user.username = "a"*17
+          @user.save
+        end
+        it { should_not be_valid }
+      end
+    end
+  end
+  
+  describe "no duplicate usernames" do
+    before do
+      user2 = @user.dup
+      user2.username = user2.username.upcase
+      user2.save
+    end
+    
+    it { should_not be_valid }
+  end
+  
+  describe "username is case insensitive" do
+    let(:randomname) { "fFdSgSdDxX" }
+    before do
+      @user.username = randomname
+      @user.save
+    end
+    
+    specify { expect(@user.reload.username).to eq(randomname.downcase) }
+  end
+  
   describe "with admin attribute set to true" do
     before do
       @user.save

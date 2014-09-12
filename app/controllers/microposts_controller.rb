@@ -1,8 +1,10 @@
 class MicropostsController < ApplicationController
   before_action :signed_in_users, only: [:create, :destroy]
   before_action :correct_micropost_user, only: :destroy
+  
+  
   def create
-    @micropost = current_user.microposts.build(micropost_params)
+    @micropost = current_user.microposts.build(micropost_params)     
     if @micropost.save
       flash[:success] = "Micropost Created!"
       redirect_to root_url
@@ -10,6 +12,7 @@ class MicropostsController < ApplicationController
       @feed_items = current_user.microposts.paginate(page: params[:page])
       render 'static_pages/home'
     end
+    
   end
   
   def destroy
@@ -20,6 +23,7 @@ class MicropostsController < ApplicationController
   
   private
   
+    
     def micropost_params
       params.require(:micropost).permit(:content)
     end

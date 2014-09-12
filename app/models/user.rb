@@ -1,17 +1,36 @@
+
+class UsernameValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    record.errors.add attribute, (options[:message] || "must contain only letters and number") unless
+      value =~ /\A[a-z0-9]+\z/i
+  end
+end
+
 class User < ActiveRecord::Base
 	before_create :create_remember_token
 	has_many :microposts, dependent: :destroy
+  
+  #followed_users array
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: :followed
+  
+  #followers array
   has_many :reverse_relationships, foreign_key: "followed_id",
                                      class_name:  "Relationship"
   has_many :followers, through: :reverse_relationships, source: :follower
-	before_save {self.email = email.downcase}
+  
+  
+  
+	before_save { self.email = email.downcase }
+  before_save { self.username = username.downcase }
+  
 	has_secure_password
 	validates :password, length: {minimum: 6}
 	validates :name, presence: true, length: {maximum: 50}
+  validates :username, presence: true, uniqueness: {case_sensitive: false}, 
+            length: { minimum: 4, maximum: 16 }, username: true
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-	validates :email, presence: true, format: {with: VALID_EMAIL_REGEX}, uniqueness: {case_sensitive: false}
+	validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: {case_sensitive: false}
 
 	def User.new_remember_token
 		SecureRandom.urlsafe_base64

@@ -41,6 +41,27 @@ describe "StaticPages" do
       
     end
     
+    
+    describe "micropost pagination" do
+      let(:user) { FactoryGirl.create(:user) }
+    	after(:all) {user.microposts.delete_all}
+  
+      before do
+        31.times { FactoryGirl.create(:micropost, user: user, content: "random") }
+        sign_in user
+        visit root_url
+      end
+  
+      it { should have_selector('div.pagination')}
+  
+      it "should have all the microposts" do
+        user.microposts.paginate(page: 1).each do |post|
+          expect(page).to have_selector('li', text: user.name)
+        end
+      end
+  
+    end
+    
     describe "micropost pluralrization" do
       let(:user) { FactoryGirl.create(:user) }
       let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "testing") }
@@ -59,29 +80,11 @@ describe "StaticPages" do
     
     
     
-    describe "micropost pagination" do
-      let(:user) { FactoryGirl.create(:user) }
-			after(:all) {user.microposts.delete_all}
-      
-      before do
-        31.times { FactoryGirl.create(:micropost, user: user, content: "random") }
-        sign_in user
-        visit root_url
-      end
-      
-      it { should have_selector('div.pagination')}
-      
-      it "should have all the microposts" do
-        user.microposts.paginate(page: 1).each do |post|
-          expect(page).to have_selector('li', text: user.name)
-        end
-      end
-      
-    end
+    
     
     describe "follower/following counts" do
       let(:user) {FactoryGirl.create(:user) }
-      let(:other_user) { FactoryGirl.create(:user) }
+      let(:other_user) { FactoryGirl.create(:user, username: "randomtest2", email: "testing2@testing.com") }
       
       before do
         sign_in user
@@ -92,6 +95,41 @@ describe "StaticPages" do
       it { should have_link("0 following", href: following_user_path(user)) }
       it { should have_link("1 followers", href: followers_user_path(user)) }
     end
+    
+    
+    describe "replies should only be viewable for the intended users" do
+      let!(:user4) { FactoryGirl.create(:user, username: "teaflavored", email: "teaflavored@gmail.com") }
+      let!(:user2) { FactoryGirl.create(:user, username: "teaflavored2", email: "teaflavored2@gmail.com") }
+      let!(:user3) { FactoryGirl.create(:user, username: "teaflavored3", email: "teaflavored3@gmail.com") }
+      
+      
+      before do
+        user4.follow!(user3)
+        user2.follow!(user3)
+        sign_in user3
+        visit root_path
+        fill_in "Content", with: "@teaflavored2 testing"
+        click_button "Post"
+        click_link "Sign Out"
+        sign_in user4
+        visit root_path
+      end
+      
+      it { should_not have_content("testing") }
+      
+      describe "user2 should still see user3's reply" do
+        before do
+          click_link "Sign Out"
+          sign_in user2
+          visit root_path
+        end
+        
+        it { should have_content("testing") }
+      end
+      
+    end
+    
+    
   end
 
   describe "Help Page" do
