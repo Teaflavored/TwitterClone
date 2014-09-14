@@ -21,7 +21,10 @@ class UsersController < ApplicationController
     flash[:success] = "User deleted"
     redirect_to users_url
   end
-
+  
+  def confirmation_page
+    #confirm user by changing its state
+  end
 
   def following
     @title = "Following"

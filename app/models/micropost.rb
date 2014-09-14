@@ -1,6 +1,6 @@
 class Micropost < ActiveRecord::Base
 	belongs_to :user
-  before_save :micropost_extract_username
+  before_create :micropost_extract_username
   
 	default_scope -> { order('created_at DESC') }
   
